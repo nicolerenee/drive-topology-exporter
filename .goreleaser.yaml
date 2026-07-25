@@ -1,0 +1,35 @@
+version: 2
+project_name: drive-topology-exporter
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: drive-topology-exporter
+    main: .
+    binary: drive-topology-exporter
+    env:
+      - CGO_ENABLED=0
+    goos: [linux]        # host-tool exporter: Linux only (reads /sys, runs sas2ircu)
+    goarch: [amd64, arm64]
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
+
+archives:
+  - id: default
+    formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - README.md
+      - LICENSE
+
+checksum:
+  name_template: checksums.txt
+
+# release-please owns the changelog and creates the GitHub release; GoReleaser
+# just uploads the built binaries/archives to that existing release.
+changelog:
+  disable: true
+release:
+  mode: append

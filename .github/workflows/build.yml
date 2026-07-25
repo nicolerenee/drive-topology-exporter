@@ -3,11 +3,11 @@ on:
   push:
     branches: [main]
   pull_request:
-# Tagged releases (and their versioned images) are handled by release-please.yml.
+# CI only — no image publishing. Releases (versioned images + binaries) are
+# handled by release-please.yml, and only on tagged releases.
 
 permissions:
   contents: read
-  packages: write
 
 jobs:
   go:
@@ -20,32 +20,14 @@ jobs:
       - run: go vet ./...
       - run: go build ./...
 
-  docker:
+  docker-build:
     needs: go
     runs-on: ubuntu-latest
-    # push images only on the canonical repo (branch/tag pushes), not PRs/forks
-    if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/${{ github.repository }}
-          tags: |
-            type=ref,event=branch
-            type=sha
       - uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: VERSION=${{ github.ref_name }}
+          platforms: linux/amd64
+          push: false          # build-check only; never publish from main/PR
