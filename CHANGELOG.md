@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/nicolerenee/drive-topology-exporter/compare/v0.1.0...v0.1.1) (2026-07-25)
+
+
+### Bug Fixes
+
+* publish raw release binaries instead of tar archives ([#2](https://github.com/nicolerenee/drive-topology-exporter/issues/2)) ([6216afd](https://github.com/nicolerenee/drive-topology-exporter/commit/6216afd5d13196096ce0297eb6f8ebda8b7e708f))
+
 ## 0.1.0 (2026-07-25)
 
 
