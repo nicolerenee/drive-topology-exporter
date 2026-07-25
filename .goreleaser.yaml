@@ -18,11 +18,8 @@ builds:
 
 archives:
   - id: default
-    formats: [tar.gz]
+    formats: [binary]        # raw binaries, no tar packaging
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    files:
-      - README.md
-      - LICENSE
 
 checksum:
   name_template: checksums.txt
