@@ -25,8 +25,8 @@ checksum:
   name_template: checksums.txt
 
 # release-please owns the changelog and creates the GitHub release; GoReleaser
-# just uploads the built binaries/archives to that existing release.
+# just uploads the built binaries to that existing release without touching it.
 changelog:
   disable: true
 release:
-  mode: append
+  mode: keep-existing
